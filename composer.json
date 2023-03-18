@@ -14,7 +14,10 @@
         }
     },
     "require": {
+        "php": "^8.2",
         "psr/log": "^3.0",
-        "monolog/monolog": "^3.3"
+        "monolog/monolog": "^3.3",
+        "psr/http-server-middleware": "^1.0",
+        "nyholm/psr7": "^1.5"
     }
 }

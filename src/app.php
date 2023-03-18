@@ -6,6 +6,7 @@ namespace Tunet\Middleware;
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Nyholm\Psr7\ServerRequest;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -18,5 +19,7 @@ $application = new Application(
         new Validation(),
     ],
 );
-$request = new Request(uniqid(), 'abc');
+
+$requestId = uniqid();
+$request = (new ServerRequest('GET', '/api', [], $requestId))->withParsedBody(['requestId' => $requestId]);
 $respose = $application->handle($request);

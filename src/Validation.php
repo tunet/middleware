@@ -4,14 +4,20 @@ declare(strict_types=1);
 
 namespace Tunet\Middleware;
 
-final class Validation
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+
+final class Validation implements MiddlewareInterface
 {
-    public function handle(Request $request, callable $next): Response
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if ($request->title === '') {
-            return new Response(Status::BAD_REQUEST);
+        if ($request->getParsedBody() === null) {
+            return new Response(400);
         }
 
-        return $next($request);
+        return $handler->handle($request);
     }
 }

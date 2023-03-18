@@ -4,23 +4,28 @@ declare(strict_types=1);
 
 namespace Tunet\Middleware;
 
-final class Pipeline
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+
+final class Pipeline implements RequestHandlerInterface
 {
     /**
-     * @param list<Middleware> $middlewares
+     * @param list<MiddlewareInterface> $middlewares
      */
     public function __construct(
-        private readonly Handler $handler,
+        private readonly RequestHandlerInterface $handler,
         private array $middlewares,
     ) {
     }
 
-    public function handle(Request $request): Response
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
         $middleware = array_shift($this->middlewares);
 
         if ($middleware !== null) {
-            return $middleware->handle($request, [$this, 'handle']);
+            return $middleware->process($request, $this);
         }
 
         return $this->handler->handle($request);

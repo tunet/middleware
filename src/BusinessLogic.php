@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace Tunet\Middleware;
 
-final class BusinessLogic implements Handler
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
+
+final class BusinessLogic implements RequestHandlerInterface
 {
-    public function handle(Request $request): Response
+    public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        return new Response(Status::OK);
+        return new Response();
     }
 }
